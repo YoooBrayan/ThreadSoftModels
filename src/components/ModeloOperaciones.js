@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 export default function ModeloOperaciones() {
   const { id } = useParams();
@@ -14,19 +17,19 @@ export default function ModeloOperaciones() {
     const response = await fetch("http://localhost:8080/api/v1/modelo/" + id);
     const data = await response.json();
     setModelo(data);
-    console.log(data);
   };
 
   const getOperacionesM = async () => {
-      const response = await fetch("http://localhost:8080/api/v1/modelo/"+id+"/operaciones");
-      const data = await response.json();
-      setMOperaciones(data);
+    const response = await fetch(
+      "http://localhost:8080/api/v1/modelo/" + id + "/operaciones"
+    );
+    const data = await response.json();
+    setMOperaciones(data);
   };
 
   const getOperaciones = async () => {
     const response = await fetch("http://localhost:8080/api/v1/operacion");
     const data = await response.json();
-    console.log(data);
     setOperaciones(data);
     //setBusqueda(data);
   };
@@ -38,7 +41,6 @@ export default function ModeloOperaciones() {
   }, []);
 
   useEffect(() => {
-    console.log(filtro);
 
     setBusqueda(
       operaciones.filter((operacion) => {
@@ -48,6 +50,56 @@ export default function ModeloOperaciones() {
       })
     );
   }, [filtro]);
+
+  const addOperacion = async (operacion) => {
+
+    if (!mOperaciones.find((o) => o.id === operacion.id)) {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/modeloOperacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ modelo: modelo.id, operacion: operacion.id }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.response) {
+        setMOperaciones([
+          ...mOperaciones,
+          {
+            id: operacion.id,
+            descripcion: operacion.descripcion,
+            valor: operacion.valor,
+          },
+        ]);
+
+        Swal.fire({
+          position: "top-end",
+          title: "Operacion Agregada",
+          icon: "success",
+          timer: 1000,
+        });
+      } else {
+        Swal.fire({
+          position: "center",
+          title: "Error al agregar operacion",
+          icon: "warning",
+          timer: 1500,
+        });
+      }
+    } else {
+      Swal.fire({
+        position: "center",
+        title: "La operacion ya fue agregada",
+        icon: "warning",
+        timer: 1500,
+      });
+    }
+  };
 
   return (
     <div className="row">
@@ -63,11 +115,11 @@ export default function ModeloOperaciones() {
             </div>
             <div className="col-8">
               <h3>{modelo.nombre}</h3>
-              <h3>Price: {modelo.valor}</h3>
-              <p>dsadasdasdsa</p>
+              <h3>Valor: {modelo.valor}</h3>
+              {/*<p>dsadasdasdsa</p>
               <button className="btn btn-primary btn-block">
                 Nueva Operacion
-              </button>
+              </button>*/}
             </div>
           </div>
         </div>
@@ -83,13 +135,25 @@ export default function ModeloOperaciones() {
             </tr>
           </thead>
           <tbody>
-            {mOperaciones.map((operacion, index) => (
-              <tr key={index}>
+            {mOperaciones.map((operacion) => (
+              <tr key={operacion.id}>
                 <td>{operacion.descripcion}</td>
                 <td>{operacion.valor}</td>
                 <td>
-                  <button className="btn btn-info"></button>
-                  <button className="btn btn-danger"></button>
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="m-1"
+                    onClick={(e) => {
+                      console.log("click " + operacion.id);
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className="m-1"
+                    onClick={(e) => {
+                      console.log("click " + operacion.id);
+                    }}
+                  />
                 </td>
               </tr>
             ))}
@@ -115,13 +179,17 @@ export default function ModeloOperaciones() {
               </tr>
             </thead>
             <tbody>
-              {busqueda.map((operacion, index) => (
-                <tr key={index}>
+              {busqueda.map((operacion) => (
+                <tr key={operacion.id}>
                   <td>{operacion.descripcion}</td>
                   <td>{operacion.valor}</td>
                   <td>
-                    {" "}
-                    <button className="btn btn-success ml-4">Agregar</button>
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      onClick={() => {
+                        addOperacion(operacion);
+                      }}
+                    />
                   </td>
                 </tr>
               ))}
