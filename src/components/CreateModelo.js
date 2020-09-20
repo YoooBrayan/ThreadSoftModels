@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const CreateModelo = () => {
   const [newModelo, setNewModelo] = useState({
-    id: 72,
     nombre: "",
     valor: "",
     proveedor: 1,
@@ -24,15 +22,16 @@ export const CreateModelo = () => {
 
     const data = await response.json();
 
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Your work has been saved",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-
     if (data.response) {
+
+       await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Modelo Añadido",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
       window.location = "/modelos";
     }
   };
@@ -42,7 +41,7 @@ export const CreateModelo = () => {
   };
 
   return (
-    <div className="row mt-3">
+    <div className="row">
       <div className="col-4 offset-4">
         <div className="card card-body bg-dark">
           <h3 className="text-white">Create New Modelo </h3>

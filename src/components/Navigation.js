@@ -15,9 +15,9 @@ export default function Navigation() {
       >
         <span className="navbar-toggler-icon" />
       </button>
-      <a className="navbar-brand text-white" href="#">
+      <Link className="navbar-brand text-white" to="#">
         Navbar
-      </a>
+      </Link>
       <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
           <li className="nav-item active">

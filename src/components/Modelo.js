@@ -32,7 +32,7 @@ export default function Modelo() {
   }, [filtro]);
 
   return (
-    <div className="row m-3">
+    <div className="row">
       <div className="col-12">
         <div className="input-group mb-3">
           <input
@@ -80,13 +80,13 @@ export default function Modelo() {
             <div className="card-body text-center">
               <h5 className="card-title">{busqueda.nombre}</h5>
               <p className="card-text">{busqueda.valor}</p>
-              <a
+              <Link to={"modelo/operaciones/" + busqueda.id}
                 className={
                   busqueda === "Nuevo" ? "btn btn-success" : "btn btn-primary"
                 }
               >
                 {busqueda.nombre === "Nuevo" ? "Agregar" : "operaciones"}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
