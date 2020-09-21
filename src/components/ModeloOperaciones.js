@@ -25,10 +25,11 @@ export default function ModeloOperaciones() {
 
   const getOperacionesM = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/v1/modelo/" + id + "/operaciones"
+      `http://localhost:8080/api/v1/modelo/${id}/operaciones`
     );
     const data = await response.json();
     setMOperaciones(data);
+    console.log(data);
   };
 
   const getOperaciones = async () => {
@@ -55,7 +56,7 @@ export default function ModeloOperaciones() {
   }, [filtro]);
 
   const addOperacion = async (operacion) => {
-    if (!mOperaciones.find((o) => o.id === operacion.id)) {
+    if (!mOperaciones.find((o) => o.descripcion === operacion.descripcion)) {
       const response = await fetch(
         "http://localhost:8080/api/v1/modeloOperacion",
         {
@@ -67,13 +68,18 @@ export default function ModeloOperaciones() {
         }
       );
 
+      const responseId = await fetch(
+        "http://localhost:8080/api/v1/modeloOperacion"
+      );
+      const idModeloOperacion = await responseId.json();
+
       const data = await response.json();
 
       if (data.response) {
         setMOperaciones([
           ...mOperaciones,
           {
-            id: operacion.id,
+            id: idModeloOperacion,
             descripcion: operacion.descripcion,
             valor: operacion.valor,
           },
@@ -101,6 +107,8 @@ export default function ModeloOperaciones() {
         timer: 1500,
       });
     }
+
+    setFiltro("");
   };
 
   const handleInputchange = (e) => {
@@ -110,7 +118,6 @@ export default function ModeloOperaciones() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //(!mOperaciones.find((o) => o.id === operacion.id))
     if (
       !mOperaciones.find(
         (operacion) =>
@@ -118,13 +125,6 @@ export default function ModeloOperaciones() {
           operacion.valor === newOperacion.valor
       )
     ) {
-      const idOperacion = operaciones[operaciones.length - 1].id + 1;
-
-      const responseId = await fetch(
-        "http://localhost:8080/api/v1/modeloOperacion"
-      );
-      const idModeloOperacion = await responseId.json();
-
       const response = await fetch("http://localhost:8080/api/v1/operacion", {
         method: "POST",
         body: JSON.stringify(newOperacion),
@@ -136,6 +136,11 @@ export default function ModeloOperaciones() {
       const data = await response.json();
 
       if (data.response) {
+        const responseId = await fetch(
+          "http://localhost:8080/api/v1/operacion/lastId"
+        );
+        const idOperacion = await responseId.json();
+
         const response = await fetch(
           "http://localhost:8080/api/v1/modeloOperacion",
           {
@@ -153,6 +158,11 @@ export default function ModeloOperaciones() {
         const data = await response.json();
 
         if (data.response) {
+          const responseId = await fetch(
+            "http://localhost:8080/api/v1/modeloOperacion"
+          );
+          const idModeloOperacion = await responseId.json();
+
           setMOperaciones([
             ...mOperaciones,
             {
@@ -162,7 +172,14 @@ export default function ModeloOperaciones() {
             },
           ]);
 
-          setOperaciones([...operaciones, {id: idOperacion, descripcion: newOperacion.descripcion, valor: newOperacion.valor}]);
+          setOperaciones([
+            ...operaciones,
+            {
+              id: idOperacion,
+              descripcion: newOperacion.descripcion,
+              valor: newOperacion.valor,
+            },
+          ]);
 
           Swal.fire({
             position: "top-end",
@@ -195,6 +212,23 @@ export default function ModeloOperaciones() {
         icon: "warning",
         timer: 1500,
       });
+    }
+  };
+
+  const deleteOperacion = async (id) => {
+    const response = await fetch(
+      "http://localhost:8080/api/v1/modeloOperacion/" + id,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+
+    if(data){
+      getOperacionesM();
     }
   };
 
@@ -258,6 +292,7 @@ export default function ModeloOperaciones() {
               className="form-control mb-3"
               placeholder="buscar"
               value={filtro}
+              autoFocus
               onChange={(e) => setFiltro(e.target.value)}
             />
             <table className="table">
@@ -314,8 +349,8 @@ export default function ModeloOperaciones() {
                   <FontAwesomeIcon
                     icon={faTimes}
                     className="m-1"
-                    onClick={(e) => {
-                      console.log("click " + operacion.id);
+                    onClick={() => {
+                      deleteOperacion(operacion.id);
                     }}
                   />
                 </td>
