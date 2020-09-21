@@ -18,7 +18,6 @@ export default function Modelo() {
   }, []);
 
   useEffect(() => {
-    console.log(filtro);
 
     setBusqueda(
       modelo.filter((item) => {
