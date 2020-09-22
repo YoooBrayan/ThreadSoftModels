@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import {Redirect} from 'react-router-dom'
 
 export const CreateModelo = () => {
   const [newModelo, setNewModelo] = useState({
@@ -7,6 +8,8 @@ export const CreateModelo = () => {
     valor: "",
     proveedor: 1,
   });
+
+  const [estado, setEstado] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,16 +32,24 @@ export const CreateModelo = () => {
         icon: "success",
         title: "Modelo Añadido",
         showConfirmButton: false,
-        timer: 2000,
+        timer: 1500,
       });
 
-      window.location = "/modelos";
+      //window.location = "/modelos";
+      setEstado(true);
     }
   };
 
   const handleInputchange = (e) => {
     setNewModelo({ ...newModelo, [e.target.name]: e.target.value });
   };
+
+
+  if(estado){
+    return (
+      <Redirect to="/modelos"/>
+    );
+  }
 
   return (
     <div className="row">

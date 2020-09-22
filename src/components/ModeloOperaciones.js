@@ -216,19 +216,32 @@ export default function ModeloOperaciones() {
   };
 
   const deleteOperacion = async (id) => {
-    const response = await fetch(
-      "http://localhost:8080/api/v1/modeloOperacion/" + id,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
+    const result = await Swal.fire({
+      title: "¿Esta seguro?",
+      text: "Eliminar Operacion!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Eliminar!",
+    });
 
-    if(data){
-      getOperacionesM();
+    console.log(result);
+    if (result.isConfirmed) {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/modeloOperacion/" + id,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data) {
+        getOperacionesM();
+      }
     }
   };
 
