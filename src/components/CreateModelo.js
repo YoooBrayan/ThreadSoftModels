@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import {Redirect} from 'react-router-dom'
+import { Redirect } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 export const CreateModelo = () => {
-  const [newModelo, setNewModelo] = useState({
+  /*const [newModelo, setNewModelo] = useState({
     nombre: "",
     valor: "",
     proveedor: 1,
-  });
+  });*/
 
-  const [estado, setEstado] = useState(false)
+  const { register, errors, handleSubmit } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(newModelo);
+  const [estado, setEstado] = useState(false);
 
-    const response = await fetch("http://localhost:8080/api/v1/modelo", {
+  const onSubmit = async (newModelo, e) => {
+    newModelo = { ...newModelo, proveedor: 1 };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/modelo", {
       method: "POST",
       body: JSON.stringify(newModelo),
       headers: {
@@ -24,10 +27,9 @@ export const CreateModelo = () => {
     });
 
     const data = await response.json();
-
+    e.target.reset();
     if (data.response) {
-
-       await Swal.fire({
+      await Swal.fire({
         position: "top-end",
         icon: "success",
         title: "Modelo Añadido",
@@ -38,17 +40,24 @@ export const CreateModelo = () => {
       //window.location = "/modelos";
       setEstado(true);
     }
+    } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "No se registro el modelo",
+        text: error
+      });
+
+      e.target.reset(); 
+    }
   };
 
-  const handleInputchange = (e) => {
+  /*const handleInputchange = (e) => {
     setNewModelo({ ...newModelo, [e.target.name]: e.target.value });
-  };
+  };*/
 
-
-  if(estado){
-    return (
-      <Redirect to="/modelos"/>
-    );
+  if (estado) {
+    return <Redirect to="/modelos" />;
   }
 
   return (
@@ -56,7 +65,7 @@ export const CreateModelo = () => {
       <div className="col-4 offset-4">
         <div className="card card-body bg-dark">
           <h3 className="text-white">Create New Modelo </h3>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <input
                 type="text"
@@ -64,19 +73,31 @@ export const CreateModelo = () => {
                 className="form-control"
                 name="nombre"
                 autoFocus
-                onChange={handleInputchange}
-                required
+                ref={register({
+                  required: { value: true, message: "Campo obligatorio" },
+                  maxLength: { value: 30, message: "Maximo 30 letras" },
+                })}
               />
+              <span className="text-danger mb-2 text-small d-block">
+                {errors?.nombre?.message}
+              </span>
             </div>
             <div className="form-group">
               <input
-                type="text"
+                type="number"
                 placeholder="valor"
                 className="form-control"
                 name="valor"
-                onChange={handleInputchange}
-                required
+                ref={register({
+                  required: { value: true, message: "Campo obligatorio" },
+                  maxLength: { value: 7, message: "Maximo 7 numeros" },
+                })}
               />
+              {errors.valor && (
+                <span className="text-danger text-small d-block mb-2">
+                  {errors.valor.message}
+                </span>
+              )}
             </div>
             <div className="form-group">
               <button className="btn btn-success btn-block">Add</button>
