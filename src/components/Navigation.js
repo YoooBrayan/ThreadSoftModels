@@ -15,14 +15,14 @@ export default function Navigation() {
       >
         <span className="navbar-toggler-icon" />
       </button>
-      <Link className="navbar-brand text-white" to="#">
+      <Link className="navbar-brand text-white" to="/">
         Navbar
       </Link>
       <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
+        <ul className="navbar-nav mt-2 mt-lg-0">
           <li className="nav-item active">
             <Link className="nav-link text-white" to="/modelos">
-              Home
+              Modelos
             </Link>
           </li>
         </ul>

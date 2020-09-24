@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {Link, useParams} from 'react-router-dom'
-import Swal from "sweetalert2";
-
+import {Link} from 'react-router-dom'
 
 export default function Modelo() {
   const [modelo, setModelo] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [busqueda, setBusqueda] = useState([]);
-
-  const { estado } = useParams();
 
   const getModels = async () => {
     const models = await fetch("http://localhost:8080/api/v1/modelo");
@@ -34,19 +30,7 @@ export default function Modelo() {
     );
   }, [filtro]);
 
-  if(estado){
-    return(Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Modelo Añadido",
-      showConfirmButton: false,
-      timer: 2000
-    }
-    ));
-  }
-
   return (
-
     <div className="row">
       <div className="col-12">
         <div className="input-group mb-3">

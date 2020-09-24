@@ -11,16 +11,23 @@ export default function ModeloOperaciones() {
   const [filtro, setFiltro] = useState("");
   const [busqueda, setBusqueda] = useState([]);
   const [mOperaciones, setMOperaciones] = useState([]);
-  const [modelo, setModelo] = useState({});
+  const [modelo, setModelo] = useState({
+    nombre: "",
+    valor: 0,
+  });
+
   const [newOperacion, setNewOperacion] = useState({
     descripcion: "",
-    valor: "",
+    valor: 0,
   });
+
+  const [total, setTotal] = useState(0);
 
   const getModelo = async () => {
     const response = await fetch("http://localhost:8080/api/v1/modelo/" + id);
     const data = await response.json();
     setModelo(data);
+    //console.log(data);
   };
 
   const getOperacionesM = async () => {
@@ -29,7 +36,17 @@ export default function ModeloOperaciones() {
     );
     const data = await response.json();
     setMOperaciones(data);
-    console.log(data);
+
+    /*let numeros = [1, 2, 3, 4, 5];
+    let total = numeros.reduce((a, b) => a + b, 0);
+    
+    console.log(total);*/
+
+    //let total = data.reduce((a, b) => ({valor: a.valor + b.valor}));
+    //console.log(total.valor)
+    if (data[0]!=undefined) {
+      setTotal(data.reduce((a, b) => ({ valor: a.valor + b.valor })).valor);
+    }
   };
 
   const getOperaciones = async () => {
@@ -91,6 +108,10 @@ export default function ModeloOperaciones() {
           icon: "success",
           timer: 1000,
         });
+
+        //setTotal(data.reduce((a, b) => ({ valor: a.valor + b.valor })).valor);
+        setTotal(total + operacion.valor);
+
       } else {
         Swal.fire({
           position: "center",
@@ -181,6 +202,8 @@ export default function ModeloOperaciones() {
             },
           ]);
 
+          setTotal(total + parseInt(newOperacion.valor));
+
           Swal.fire({
             position: "top-end",
             title: "Registro exitoso",
@@ -188,7 +211,7 @@ export default function ModeloOperaciones() {
             timer: 1500,
           });
 
-          setNewOperacion({ descripcion: "", valor: "" });
+          setNewOperacion({ descripcion: "", valor: 0 });
         } else {
           Swal.fire({
             position: "top-end",
@@ -226,7 +249,6 @@ export default function ModeloOperaciones() {
       confirmButtonText: "Si, Eliminar!",
     });
 
-    console.log(result);
     if (result.isConfirmed) {
       const response = await fetch(
         "http://localhost:8080/api/v1/modeloOperacion/" + id,
@@ -245,6 +267,44 @@ export default function ModeloOperaciones() {
     }
   };
 
+  /*const onblurModelo = (e) => {
+    console.log(modelo)
+  };*/
+
+  const onChangeModelo = (e) => {
+    setModelo({ ...modelo, [e.target.name]: e.target.value });
+  };
+
+  const onSubmitModelo = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/modelo", {
+        method: "PUT",
+        body: JSON.stringify(modelo),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      const data = await res.json();
+      if (data.response) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Modelo Actualizado!",
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        title: "Error al Actualizar!",
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <div className="row">
       <div className="col-5">
@@ -258,8 +318,37 @@ export default function ModeloOperaciones() {
               />
             </div>
             <div className="col-8">
-              <h3>{modelo.nombre}</h3>
-              <h3>Valor: {modelo.valor}</h3>
+              <form onSubmit={onSubmitModelo}>
+                <div className="form-group">
+                  <h3>Modelo:</h3>
+                  <input
+                    name="nombre"
+                    type="text"
+                    value={modelo.nombre}
+                    style={{ border: "none" }}
+                    className="bg-light h3 w-100 border-bottom"
+                    //onBlur={onblurModelo}
+                    onChange={onChangeModelo}
+                  />
+                </div>
+                <div className="form-group d-flex">
+                  <h5>Valor:</h5>
+                  <input
+                    name="valor"
+                    type="text"
+                    value={modelo.valor}
+                    style={{ border: "none" }}
+                    className="bg-light w-50 h5 ml-1 border-bottom"
+                    onChange={onChangeModelo}
+                  />
+                </div>
+                <div className="form-group">
+                  <button className="btn btn-success btn-block d-none">
+                    Add
+                  </button>
+                </div>
+              </form>
+
               {/*<p>dsadasdasdsa</p>
               <button className="btn btn-primary btn-block">
                 Nueva Operacion
@@ -305,7 +394,6 @@ export default function ModeloOperaciones() {
               className="form-control mb-3"
               placeholder="buscar"
               value={filtro}
-              autoFocus
               onChange={(e) => setFiltro(e.target.value)}
             />
             <table className="table">
@@ -353,13 +441,6 @@ export default function ModeloOperaciones() {
                 <td>{operacion.valor}</td>
                 <td>
                   <FontAwesomeIcon
-                    icon={faEdit}
-                    className="m-1"
-                    onClick={(e) => {
-                      console.log("click " + operacion.id);
-                    }}
-                  />
-                  <FontAwesomeIcon
                     icon={faTimes}
                     className="m-1"
                     onClick={() => {
@@ -370,6 +451,16 @@ export default function ModeloOperaciones() {
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr className="table-dark">
+              <td className="text-dark font-weight-bold" colSpan="1">
+                Total
+              </td>
+              <td className="text-dark font-weight-bold" colSpan="2">
+                {total}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

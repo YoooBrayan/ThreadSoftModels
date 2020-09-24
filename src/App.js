@@ -5,7 +5,7 @@ import Navigation from "./components/Navigation";
 import Modelo from "./components/Modelo";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { CreateModelo } from "./components/CreateModelo";
-import ModeloOperaciones from './components/ModeloOperaciones';
+import ModeloOperaciones from './components/ModeloOperaciones/ModeloOperaciones';
 
 function App() {
   return (
