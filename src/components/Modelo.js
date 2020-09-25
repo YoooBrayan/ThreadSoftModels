@@ -45,7 +45,7 @@ export default function Modelo() {
         </div>
       </div>
 
-      <div className="col-3">
+      {filtro===""?<div className="col-12 col-md-4 col-sm-6 col-lg-3">
         <div className="card m-1">
           <img
             src="https://www.pinclipart.com/picdir/big/335-3351291_blouse-coloring-page-imagenes-de-blusa-para-dibujar.png"
@@ -61,10 +61,10 @@ export default function Modelo() {
             </Link>
           </div>
         </div>
-      </div>
+      </div>: ""}
 
       {busqueda.map((busqueda, index) => (
-        <div className="col-3" key={index}>
+        <div className="col-12 col-md-4 col-sm-6 col-lg-3" key={index}>
           <div className="card m-1">
             <img
               src={

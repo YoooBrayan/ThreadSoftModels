@@ -53,7 +53,7 @@ export const CreateModelo = () => {
 
   return (
     <div className="row">
-      <div className="col-4 offset-4">
+      <div className="col-12 col-sm-10 offset-sm-1 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
         <div className="card card-body bg-dark">
           <h3 className="text-white">Crear Nuevo Modelo</h3>
           <form onSubmit={handleSubmit(onSubmit)}>

@@ -310,7 +310,7 @@ export default function ModeloOperaciones() {
 
   return (
     <div className="row">
-      <div className="col-5">
+      <div className="col-12 col-md-6 mb-4">
         <EditModelo
           id={id}
           onChangeModeloP={onChangeModelo}
@@ -333,7 +333,7 @@ export default function ModeloOperaciones() {
           total={total}
         />
       </div>
-      <div className="col-7 border bg-light">
+      <div className="col-12 col-md-6 border bg-light">
         <h3 className="text-center mb-3">Operaciones</h3>
         <TableOperaciones
           servicio={deleteOperacion}
