@@ -1,43 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
-export const EditModelo = () => {
-    
-  const [modelo, setModelo] = useState({
-    nombre: "",
-    valor: 0,
-  });
+export default function EditModelo({id, onChangeModeloP, onSubmitModeloP, modelo}) {
+
+
   const onChangeModelo = (e) => {
-    setModelo({ ...modelo, [e.target.name]: e.target.value });
+    onChangeModeloP(e)
   };
-
+ 
   const onSubmitModelo = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("http://localhost:8080/api/v1/modelo", {
-        method: "PUT",
-        body: JSON.stringify(modelo),
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-      if (data.response) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Modelo Actualizado!",
-          timer: 1500,
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        position: "center",
-        title: "Error al Actualizar!",
-        icon: "error",
-      });
-    }
+    onSubmitModeloP(e)
   };
 
   return (
@@ -88,4 +60,4 @@ export const EditModelo = () => {
       </div>
     </div>
   );
-};
+}

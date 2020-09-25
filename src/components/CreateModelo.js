@@ -4,11 +4,6 @@ import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 export const CreateModelo = () => {
-  /*const [newModelo, setNewModelo] = useState({
-    nombre: "",
-    valor: "",
-    proveedor: 1,
-  });*/
 
   const { register, errors, handleSubmit } = useForm();
 
@@ -52,10 +47,6 @@ export const CreateModelo = () => {
     }
   };
 
-  /*const handleInputchange = (e) => {
-    setNewModelo({ ...newModelo, [e.target.name]: e.target.value });
-  };*/
-
   if (estado) {
     return <Redirect to="/modelos" />;
   }
@@ -64,7 +55,7 @@ export const CreateModelo = () => {
     <div className="row">
       <div className="col-4 offset-4">
         <div className="card card-body bg-dark">
-          <h3 className="text-white">Create New Modelo </h3>
+          <h3 className="text-white">Crear Nuevo Modelo</h3>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <input
@@ -100,7 +91,7 @@ export const CreateModelo = () => {
               )}
             </div>
             <div className="form-group">
-              <button className="btn btn-success btn-block">Add</button>
+              <button className="btn btn-success btn-block">Agregar</button>
             </div>
           </form>
         </div>
