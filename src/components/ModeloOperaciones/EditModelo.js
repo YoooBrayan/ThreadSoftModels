@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import {useSelector, useDispatch} from 'react-redux';
+import {actualizarModeloAccion, obtenerModeloAccion, actualizarModeloAPIAccion} from '../../redux/modeloDucks';
 
-export default function EditModelo({id, onChangeModeloP, onSubmitModeloP, modelo}) {
+export default function EditModelo({id}) {
+
+  const dispatch = useDispatch();
+  const modelo = useSelector(state => state.modelo)
+
+  useEffect(() => {
+    dispatch(obtenerModeloAccion(id))
+  }, [])
 
 
   const onChangeModelo = (e) => {
-    onChangeModeloP(e)
+    let data = e.currentTarget; //solucion a error: This synthetic event is reused for performance reasons. If you're seeing this, you're accessing the method currentTarget on a released/nullified synthetic event. This is a no-op function. If you must keep the original synthetic event around, use event.persist().
+    dispatch(actualizarModeloAccion(data))
   };
  
   const onSubmitModelo = async (e) => {
-    onSubmitModeloP(e)
+    e.preventDefault();
+    dispatch(actualizarModeloAPIAccion())
   };
 
   return (
@@ -51,11 +62,6 @@ export default function EditModelo({id, onChangeModeloP, onSubmitModeloP, modelo
               <button className="btn btn-success btn-block d-none">Add</button>
             </div>
           </form>
-
-          {/*<p>dsadasdasdsa</p>
-              <button className="btn btn-primary btn-block">
-                Nueva Operacion
-              </button>*/}
         </div>
       </div>
     </div>

@@ -7,7 +7,10 @@ import CreateOperacion from "./CreateOperacion";
 import AddOperacion from "./AddOperacion";
 import TableOperaciones from "./TableOperaciones";
 
+
 export default function ModeloOperaciones() {
+
+
   const { id } = useParams();
 
   const [operaciones, setOperaciones] = useState([]);
@@ -270,40 +273,6 @@ export default function ModeloOperaciones() {
     console.log(modelo)
   };*/
 
-  const onChangeModelo = (e) => {
-    setModelo({ ...modelo, [e.target.name]: e.target.value });
-  };
-
-  const onSubmitModelo = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("http://localhost:8080/api/v1/modelo", {
-        method: "PUT",
-        body: JSON.stringify(modelo),
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-      if (data.response) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Modelo Actualizado!",
-          timer: 1500,
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        position: "center",
-        title: "Error al Actualizar!",
-        icon: "error",
-      });
-    }
-  };
-
   const filtrar = (e) => {
     setFiltro(e.target.value);
   };
@@ -313,9 +282,6 @@ export default function ModeloOperaciones() {
       <div className="col-12 col-md-6 mb-4">
         <EditModelo
           id={id}
-          onChangeModeloP={onChangeModelo}
-          onSubmitModeloP={onSubmitModelo}
-          modelo={modelo}
         />
 
         <CreateOperacion
