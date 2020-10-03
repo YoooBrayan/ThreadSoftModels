@@ -1,19 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  obtenerOperacionesAccion,
+  obtenerOperacionesModeloAccion,
+  agregarNuevaOperacionModeloAccion,
+} from "../../redux/operacionesDucks";
+import { useSelector, useDispatch } from "react-redux";
+import Swal from 'sweetalert2'
 
-export default function CreateOperacion({handleInputchangeP, handleSubmitP, newOperacion}) {
+export default function CreateOperacion({ id }) {
 
-  /*const handleInputchange = (e) => {
-    handleInputchangeP(e)
+  const dispatch = useDispatch();
+  const operacionesModelo = useSelector(
+    (state) => state.operaciones.operacionesModelo
+  );
+
+  const [newOperacion, setNewOperacion] = useState({
+    descripcion: "",
+    valor: 0,
+  });
+
+  useEffect(() => {
+    dispatch(obtenerOperacionesAccion());
+    dispatch(obtenerOperacionesModeloAccion(id));
+  }, []);
+
+  const handleInputchange = (e) => {
+    setNewOperacion({ ...newOperacion, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    handleSubmitP(e);
-  };*/
+    e.preventDefault();
+
+    if (
+      !operacionesModelo.find(
+        (operacion) =>
+          operacion.descripcion === newOperacion.descripcion &&
+          operacion.valor === newOperacion.valor
+      )
+    ) {
+      dispatch(agregarNuevaOperacionModeloAccion(newOperacion, id));
+      setNewOperacion({ descripcion: "", valor: 0 });
+    } else {
+      Swal.fire({
+        position: "center",
+        title: "La operacion ya fue agregada",
+        icon: "warning",
+        timer: 1500,
+      })
+    }
+  };
 
   return (
     <div className="card card-body bg-light mt-4">
       <h3 className="text-dark">Crear nueva operacion </h3>
-      <form onSubmit={handleSubmitP}>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <input
             type="text"
@@ -21,7 +61,7 @@ export default function CreateOperacion({handleInputchangeP, handleSubmitP, newO
             className="form-control"
             name="descripcion"
             value={newOperacion.descripcion}
-            onChange={handleInputchangeP}
+            onChange={handleInputchange}
             required
           />
         </div>
@@ -32,7 +72,7 @@ export default function CreateOperacion({handleInputchangeP, handleSubmitP, newO
             className="form-control"
             name="valor"
             value={newOperacion.valor}
-            onChange={handleInputchangeP}
+            onChange={handleInputchange}
             required
           />
         </div>

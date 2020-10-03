@@ -64,9 +64,7 @@ export const actualizarModeloAPIAccion = () => async(dispatch, getState) => {
   try {
 
     const data = getState().modelo;
-    console.log("data",data);
     const res = await axios.put(`http://localhost:8080/api/v1/modelo`, data)
-    console.log(res.data)
     if(res.data.response){
       Swal.fire({
         position: "top-end",

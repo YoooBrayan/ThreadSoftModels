@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import React from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {actualizarModeloAccion, obtenerModeloAccion, actualizarModeloAPIAccion} from '../../redux/modeloDucks';
+import {actualizarModeloAccion, actualizarModeloAPIAccion} from '../../redux/modeloDucks';
 
-export default function EditModelo({id}) {
+export default function EditModelo() {
 
   const dispatch = useDispatch();
   const modelo = useSelector(state => state.modelo)
-
-  useEffect(() => {
-    dispatch(obtenerModeloAccion(id))
-  }, [])
 
 
   const onChangeModelo = (e) => {
