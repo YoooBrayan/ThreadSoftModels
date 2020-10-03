@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import {useSelector, useDispatch} from 'react-redux'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import TableOperaciones from "./TableOperaciones";
-import {buscarOperaciones, filtrarOperacionesAccion} from '../../redux/operacionesDucks'
+import {
+  buscarOperaciones,
+  filtrarOperacionesAccion,
+} from "../../redux/operacionesDucks";
 
 export default function AddOperacion({ icon }) {
-
-  const filtro = useSelector(state => state.operaciones.filtro)
+  const filtro = useSelector((state) => state.operaciones.filtro);
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
-    dispatch(buscarOperaciones(filtro))
-  }, [filtro]);
+    dispatch(buscarOperaciones(filtro));
+  }, [filtro]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtrar = (e) => {
-    dispatch(filtrarOperacionesAccion(e.target.value))
+    dispatch(filtrarOperacionesAccion(e.target.value));
   };
 
   return (
@@ -23,6 +24,7 @@ export default function AddOperacion({ icon }) {
       <h3 className="mb-3">Agregar Operacion</h3>
       <div className="input-group mb-3">
         <input
+          id="input"
           type="text"
           className="form-control mb-3"
           placeholder="buscar"

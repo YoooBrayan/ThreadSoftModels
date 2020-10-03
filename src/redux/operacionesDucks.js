@@ -182,11 +182,15 @@ export const agregarNuevaOperacionModeloAccion = (
 
 export const buscarOperaciones = (filtro) => (dispatch, getState) => {
   const operaciones = getState().operaciones.operaciones;
+
   const data = operaciones.filter((operacion) => {
     if (operacion.descripcion.toLowerCase().includes(filtro) && filtro) {
       return operacion;
+    }else{
+      return null
     }
   });
+
 
   dispatch({
     type: BUSCAR_OPERACIONES,

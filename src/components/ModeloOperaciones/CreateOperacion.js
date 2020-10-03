@@ -5,10 +5,9 @@ import {
   agregarNuevaOperacionModeloAccion,
 } from "../../redux/operacionesDucks";
 import { useSelector, useDispatch } from "react-redux";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 export default function CreateOperacion({ id }) {
-
   const dispatch = useDispatch();
   const operacionesModelo = useSelector(
     (state) => state.operaciones.operacionesModelo
@@ -22,7 +21,7 @@ export default function CreateOperacion({ id }) {
   useEffect(() => {
     dispatch(obtenerOperacionesAccion());
     dispatch(obtenerOperacionesModeloAccion(id));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputchange = (e) => {
     setNewOperacion({ ...newOperacion, [e.target.name]: e.target.value });
@@ -40,13 +39,14 @@ export default function CreateOperacion({ id }) {
     ) {
       dispatch(agregarNuevaOperacionModeloAccion(newOperacion, id));
       setNewOperacion({ descripcion: "", valor: 0 });
+      document.getElementById("inputC").focus();
     } else {
       Swal.fire({
         position: "center",
         title: "La operacion ya fue agregada",
         icon: "warning",
         timer: 1500,
-      })
+      });
     }
   };
 
@@ -56,6 +56,7 @@ export default function CreateOperacion({ id }) {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <input
+            id="inputC"
             type="text"
             placeholder="Nombre"
             className="form-control"

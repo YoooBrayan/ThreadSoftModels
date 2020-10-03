@@ -14,7 +14,9 @@ export default function ModeloOperaciones() {
 
   useEffect(() => {
     dispatch(obtenerModeloAccion(id));
-  }, []);
+
+    return () => {}
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   /*const onblurModelo = (e) => {
     console.log(modelo)

@@ -13,7 +13,7 @@ export const CreateModelo = () => {
     newModelo = { ...newModelo, proveedor: 1 };
 
     try {
-      const response = await fetch("http://localhost:8080/api/v1/modelo", {
+      const response = await fetch("http://192.168.0.14:8080/api/v1/modelo", {
       method: "POST",
       body: JSON.stringify(newModelo),
       headers: {

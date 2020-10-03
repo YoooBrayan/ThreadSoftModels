@@ -17,6 +17,7 @@ export default function TableOperaciones({ icon }) {
   const addOperacion = async (operacion) => {
     if (!operacionesModelo.find((o) => o.descripcion === operacion.descripcion)) {
       dispatch(agregarOperacionModeloAccion(operacion))
+      document.getElementById("input").focus();
     } else {
       Swal.fire({
         position: "center",

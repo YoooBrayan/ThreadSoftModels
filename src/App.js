@@ -1,6 +1,7 @@
 import React from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Navigation from "./components/Navigation";
 import Modelo from "./components/Modelo";
 import { BrowserRouter, Route, Switch } from "react-router-dom";

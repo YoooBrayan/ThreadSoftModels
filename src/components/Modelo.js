@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import $ from "jquery";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Modelo() {
   const [modelo, setModelo] = useState([]);
@@ -15,20 +20,61 @@ export default function Modelo() {
 
   useEffect(() => {
     getModels();
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
   }, []);
 
   useEffect(() => {
-
     setBusqueda(
       modelo.filter((item) => {
         if (item.nombre.toLowerCase().includes(filtro) && filtro) {
           return item;
         } else if (!filtro) {
           return getModels();
+        } else {
+          return null;
         }
       })
     );
-  }, [filtro]);
+  }, [filtro]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const deleteModel = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Esta seguro?",
+      text: "Eliminar Modelo!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Eliminar!",
+    });
+
+    if (result.isConfirmed) {
+      const res = await axios.delete(
+        `http://localhost:8080/api/v1/modelo/${id}`
+      );
+      console.log(res.data);
+
+      if (res.data) {
+        setModelo(modelo.filter((modelo) => modelo.id !== id));
+        setBusqueda([]);
+        setFiltro("");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Modelo Eliminado",
+          timer: 1000,
+        });
+      }else{
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Error al Eliminar Modelo!"
+        });
+      }
+    }
+  };
 
   return (
     <div className="row">
@@ -45,27 +91,44 @@ export default function Modelo() {
         </div>
       </div>
 
-      {filtro===""?<div className="col-12 col-md-4 col-sm-6 col-lg-3">
-        <div className="card m-1">
-          <img
-            src="https://www.pinclipart.com/picdir/big/335-3351291_blouse-coloring-page-imagenes-de-blusa-para-dibujar.png"
-            className="card-image-top mt-3"
-            style={{ width: 100, margin: "auto" }}
-            alt=""
-          />
-          <div className="card-body text-center">
-            <h5 className="card-title">Nuevo</h5>
-            <p className="card-text"></p>
-            <Link className="btn btn-success" to="/modelo/create">
-              Agregar
-            </Link>
+      {filtro === "" ? (
+        <div className="col-12 col-md-4 col-sm-6 col-lg-3">
+          <div className="card m-1">
+            <img
+              src="https://www.pinclipart.com/picdir/big/335-3351291_blouse-coloring-page-imagenes-de-blusa-para-dibujar.png"
+              className="card-image-top mt-3"
+              style={{ width: 100, margin: "auto" }}
+              alt=""
+            />
+            <div className="card-body text-center">
+              <h5 className="card-title">Nuevo</h5>
+              <p className="card-text"></p>
+              <Link className="btn btn-success" to="/modelo/create">
+                Agregar
+              </Link>
+            </div>
           </div>
         </div>
-      </div>: ""}
+      ) : (
+        ""
+      )}
 
       {busqueda.map((busqueda, index) => (
         <div className="col-12 col-md-4 col-sm-6 col-lg-3" key={index}>
           <div className="card m-1">
+            <div className="card-header bg-white border-0 d-flex justify-content-between ml-auto">
+              <FontAwesomeIcon
+                className="text-secondary"
+                data-toggle="tooltip"
+                data-placement="left"
+                title="Eliminar"
+                icon={faWindowClose}
+                style={{ fontSize: "1.5em" }}
+                onClick={() => {
+                  deleteModel(busqueda.id);
+                }}
+              />
+            </div>
             <img
               src={
                 busqueda.nombre === "Nuevo"
@@ -79,7 +142,8 @@ export default function Modelo() {
             <div className="card-body text-center">
               <h5 className="card-title">{busqueda.nombre}</h5>
               <p className="card-text">{busqueda.valor}</p>
-              <Link to={"modelo/operaciones/" + busqueda.id}
+              <Link
+                to={"modelo/operaciones/" + busqueda.id}
                 className={
                   busqueda === "Nuevo" ? "btn btn-success" : "btn btn-primary"
                 }
