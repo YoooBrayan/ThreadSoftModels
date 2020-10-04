@@ -5,17 +5,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Spinner } from "react-bootstrap";
 
 export default function Modelo() {
   const [modelo, setModelo] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [busqueda, setBusqueda] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getModels = async () => {
     const models = await fetch("http://localhost:8080/api/v1/modelo");
     const data = await models.json();
     setModelo(data);
     setBusqueda(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -66,11 +69,11 @@ export default function Modelo() {
           title: "Modelo Eliminado",
           timer: 1000,
         });
-      }else{
+      } else {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Error al Eliminar Modelo!"
+          title: "Error al Eliminar Modelo!",
         });
       }
     }
@@ -106,6 +109,23 @@ export default function Modelo() {
               <Link className="btn btn-success" to="/modelo/create">
                 Agregar
               </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {loading ? (
+        <div className="col-lg-9 col-12 col-md-8 col-sm-6">
+          <div className="row justify-content-md-center">
+            <div className="col col-lg-2">
+            </div>
+            <Spinner
+              className="col-auto"
+              animation="grow"
+              role="status"
+            />
+            <div className="col col-lg-2">
             </div>
           </div>
         </div>
