@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { API } from "service/settings";
 
 export const CreateModelo = () => {
 
@@ -13,7 +14,7 @@ export const CreateModelo = () => {
     newModelo = { ...newModelo, proveedor: 1 };
 
     try {
-      const response = await fetch("http://192.168.0.14:8080/api/v1/modelo", {
+      const response = await fetch(`${API}modelo`, {
       method: "POST",
       body: JSON.stringify(newModelo),
       headers: {
@@ -21,9 +22,10 @@ export const CreateModelo = () => {
       },
     });
 
-    const data = await response.json();
+    //const data = await response.json();
+    console.log(response);
     e.target.reset();
-    if (data.response) {
+    if (response.status === 201) {
       await Swal.fire({
         position: "top-end",
         icon: "success",
@@ -48,7 +50,7 @@ export const CreateModelo = () => {
   };
 
   if (estado) {
-    return <Redirect to="/modelos" />;
+    return <Redirect to="/modelo" />;
   }
 
   return (

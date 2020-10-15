@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {actualizarModeloAccion, actualizarModeloAPIAccion} from '../../redux/modeloDucks';
+import {actualizarModeloAccion, actualizarModeloAPIAccion} from 'redux/modeloDucks';
 
 export default function EditModelo() {
 

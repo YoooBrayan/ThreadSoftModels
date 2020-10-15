@@ -6,27 +6,66 @@ import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Spinner } from "react-bootstrap";
+import {API} from 'service/settings';
+import {useSelector} from 'react-redux'
 
 export default function Modelo() {
   const [modelo, setModelo] = useState([]);
+  //const [modeloId, setModeloId] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [busqueda, setBusqueda] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const login = useSelector(state => state.login)
+
   const getModels = async () => {
-    const models = await fetch("http://localhost:8080/api/v1/modelo");
-    const data = await models.json();
-    setModelo(data);
-    setBusqueda(data);
-    setLoading(false);
+    console.log("Token",login.token);
+    try {
+      const models = await fetch(`${API}modelo`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + login.token
+        }
+      });
+      console.log("models", models);
+      const data = await models.json();
+      setModelo(data);
+      setBusqueda(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error)
+      Swal.fire({
+        title: 'Error',
+        text: error,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Reload!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          getModels()
+        }
+      })
+    }
   };
+
+  /*const getModelId = async () => {
+    const model = await axios.get(
+      "http://localhost:8080/api/v1/modelo/params",
+      { params: { id: 33, modelo: "Bolero"} }
+    );
+    const data = model.data;
+    setModeloId(data);
+  };*/
 
   useEffect(() => {
     getModels();
+    //getModelId();
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
-    });
-  }, []);
+    }); 
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setBusqueda(
@@ -118,15 +157,9 @@ export default function Modelo() {
       {loading ? (
         <div className="col-lg-9 col-12 col-md-8 col-sm-6">
           <div className="row justify-content-md-center">
-            <div className="col col-lg-2">
-            </div>
-            <Spinner
-              className="col-auto"
-              animation="grow"
-              role="status"
-            />
-            <div className="col col-lg-2">
-            </div>
+            <div className="col col-lg-2"></div>
+            <Spinner className="col-auto" animation="grow" role="status" />
+            <div className="col col-lg-2"></div>
           </div>
         </div>
       ) : (
@@ -150,6 +183,7 @@ export default function Modelo() {
               />
             </div>
             <img
+              loading="lazy"
               src={
                 busqueda.nombre === "Nuevo"
                   ? "https://www.pinclipart.com/picdir/big/335-3351291_blouse-coloring-page-imagenes-de-blusa-para-dibujar.png"

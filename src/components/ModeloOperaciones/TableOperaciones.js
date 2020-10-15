@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { agregarOperacionModeloAccion, eliminarOperacionModeloAccion } from "../../redux/operacionesDucks";
+import { agregarOperacionModeloAccion, eliminarOperacionModeloAccion } from "redux/operacionesDucks";
 import Swal from 'sweetalert2'
 
 export default function TableOperaciones({ icon }) {

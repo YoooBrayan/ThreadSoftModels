@@ -1,23 +1,30 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
-import EditModelo from "./EditModelo";
-import CreateOperacion from "./CreateOperacion";
-import AddOperacion from "./AddOperacion";
-import TableOperaciones from "./TableOperaciones";
-import { useDispatch } from "react-redux";
-import { obtenerModeloAccion } from "../../redux/modeloDucks";
+import EditModelo from "components/ModeloOperaciones/EditModelo";
+import CreateOperacion from "components/ModeloOperaciones/CreateOperacion";
+import AddOperacion from "components/ModeloOperaciones/AddOperacion";
+import TableOperaciones from "components/ModeloOperaciones/TableOperaciones";
+import { useDispatch, useSelector } from "react-redux";
+import { obtenerModeloAccion } from "redux/modeloDucks";
 
 export default function ModeloOperaciones() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
+  const {error} = useSelector(state => state.modelo)
+  
+  
   useEffect(() => {
     dispatch(obtenerModeloAccion(id));
 
     return () => {}
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+
+  if(error){
+    return <Redirect to="/notfound"/>
+  }
   /*const onblurModelo = (e) => {
     console.log(modelo)
   };*/

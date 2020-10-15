@@ -1,5 +1,6 @@
 import axios from "axios";
-import Swal from 'sweetalert2'
+import { API } from "service/settings";
+import Swal from "sweetalert2";
 
 // constantes
 
@@ -8,11 +9,13 @@ const dataInicial = {
   valor: 0,
   proveedor: 1,
   id: null,
+  error: false,
 };
 
 // types
 
 const OBTENER_MODELO_EXITO = "OBTENER_MODELO_EXITO";
+const OBTENER_MODELO_ERROR = "OBTENER_MODELO_ERROR";
 const ACTUALIZAR_MODELO_EXITO = "ACTUALIZAR_MODELO_EXITO";
 const ACTUALIZAR_MODELO_API_EXITO = "ACTUALIZAR_MODELO_API_EXITO";
 
@@ -21,7 +24,14 @@ const ACTUALIZAR_MODELO_API_EXITO = "ACTUALIZAR_MODELO_API_EXITO";
 export default function modeloReducer(state = dataInicial, action) {
   switch (action.type) {
     case OBTENER_MODELO_EXITO:
-      return { ...state, id: action.payload.id, nombre: action.payload.nombre, valor: action.payload.valor, proveedor: action.payload.proveedor};
+      return {
+        ...state,
+        id: action.payload.id,
+        nombre: action.payload.nombre,
+        valor: action.payload.valor,
+        proveedor: action.payload.proveedor,
+        error: false
+      };
 
     case ACTUALIZAR_MODELO_EXITO:
       return {
@@ -31,6 +41,11 @@ export default function modeloReducer(state = dataInicial, action) {
 
     case ACTUALIZAR_MODELO_API_EXITO:
       return { ...state };
+    case OBTENER_MODELO_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
 
     default:
       return state;
@@ -39,13 +54,18 @@ export default function modeloReducer(state = dataInicial, action) {
 
 export const obtenerModeloAccion = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`http://localhost:8080/api/v1/modelo/${id}`);
+    const res = await axios.get(`${API}modelo/${id}`);
     dispatch({
       type: OBTENER_MODELO_EXITO,
       payload: res.data,
     });
   } catch (error) {
-    console.log(error);
+    if (error.toString().includes("404")) {
+      dispatch({
+        type: OBTENER_MODELO_ERROR,
+        payload: true,
+      });
+    }
   }
 };
 
@@ -60,19 +80,18 @@ export const actualizarModeloAccion = (data) => async (dispatch, getState) => {
   }
 };
 
-export const actualizarModeloAPIAccion = () => async(dispatch, getState) => {
+export const actualizarModeloAPIAccion = () => async (dispatch, getState) => {
   try {
-
     const data = getState().modelo;
-    const res = await axios.put(`http://localhost:8080/api/v1/modelo`, data)
-    if(res.data.response){
+    const res = await axios.put(`${API}modelo`, data);
+    if (res.data.response) {
       Swal.fire({
         position: "top-end",
-          icon: "success",
-          title: "Modelo Actualizado!",
-          timer: 1500
-      })
-    }else{
+        icon: "success",
+        title: "Modelo Actualizado!",
+        timer: 1500,
+      });
+    } else {
       Swal.fire({
         position: "center",
         title: "Error al Actualizar!",
@@ -86,5 +105,4 @@ export const actualizarModeloAPIAccion = () => async(dispatch, getState) => {
       icon: "error",
     });
   }
-}
-
+};

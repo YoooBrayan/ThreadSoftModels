@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export default function Navigation() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <Link className="navbar-brand" to="/">
-        Navbar
+      <Link className="navbar-brand" to="/modelo">
+        Modelos
       </Link>
       <button
         className="navbar-toggler"
@@ -21,9 +21,7 @@ export default function Navigation() {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
           <li className="nav-item active">
-            <Link className="nav-link" to="/modelos">
-              Modelos <span className="sr-only">(current)</span>
-            </Link>
+            
           </li>
         </ul>
       </div>

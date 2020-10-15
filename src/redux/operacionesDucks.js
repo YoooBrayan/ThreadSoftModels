@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import axios from "axios";
+import { API } from "service/settings";
 
 // constantes
 
@@ -75,7 +76,7 @@ export default function operacionesReducer(state = dataInicial, action) {
 
 export const obtenerOperacionesAccion = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`http://localhost:8080/api/v1/operacion`);
+    const res = await axios.get(`${API}operacion`);
     dispatch({
       type: OBTENER_OPERACIONES_EXITO,
       payload: res.data,
@@ -91,7 +92,7 @@ export const obtenerOperacionesModeloAccion = (idModelo) => async (
 ) => {
   try {
     const res = await axios.get(
-      `http://localhost:8080/api/v1/modelo/${idModelo}/operaciones`
+      `${API}modelo/${idModelo}/operaciones`
     );
 
     let total = 0;
@@ -118,7 +119,7 @@ export const agregarNuevaOperacionModeloAccion = (
 ) => async (dispatch, getState) => {
   try {
     const res = await axios.post(
-      `http://localhost:8080/api/v1/operacion`,
+      `${API}operacion`,
       newOperacion
     );
 
@@ -129,15 +130,15 @@ export const agregarNuevaOperacionModeloAccion = (
       });
 
       const res = await axios.get(
-        `http://localhost:8080/api/v1/operacion/lastId`
+        `${API}operacion/lastId`
       );
       const response = await axios.post(
-        `http://localhost:8080/api/v1/modeloOperacion`,
+        `${API}modeloOperacion`,
         { modelo: idModelo, operacion: res.data }
       );
       if (response.data.response) {
         const idModeloOperacion = await axios.get(
-          `http://localhost:8080/api/v1/modeloOperacion`
+          `${API}modeloOperacion`
         );
 
         dispatch({
@@ -186,11 +187,10 @@ export const buscarOperaciones = (filtro) => (dispatch, getState) => {
   const data = operaciones.filter((operacion) => {
     if (operacion.descripcion.toLowerCase().includes(filtro) && filtro) {
       return operacion;
-    }else{
-      return null
+    } else {
+      return null;
     }
   });
-
 
   dispatch({
     type: BUSCAR_OPERACIONES,
@@ -205,12 +205,12 @@ export const agregarOperacionModeloAccion = (operacion) => async (
   try {
     const modelo = getState().modelo;
     const res = await axios.post(
-      `http://localhost:8080/api/v1/modeloOperacion`,
+      `${API}modeloOperacion`,
       { modelo: modelo.id, operacion: operacion.id }
     );
 
     const responseId = await axios.get(
-      `http://localhost:8080/api/v1/modeloOperacion`
+      `${API}modeloOperacion`
     );
 
     if (res.data.response) {
@@ -260,7 +260,7 @@ export const eliminarOperacionModeloAccion = (operacion) => async (
 ) => {
   try {
     const res = await axios.delete(
-      `http://localhost:8080/api/v1/modeloOperacion/${operacion.id}`
+      `${API}modeloOperacion/${operacion.id}`
     );
 
     if (res.data) {

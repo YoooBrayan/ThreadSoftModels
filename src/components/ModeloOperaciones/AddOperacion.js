@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TableOperaciones from "./TableOperaciones";
+import TableOperaciones from "components/ModeloOperaciones/TableOperaciones";
 import {
   buscarOperaciones,
   filtrarOperacionesAccion,
-} from "../../redux/operacionesDucks";
+} from "redux/operacionesDucks";
 
 export default function AddOperacion({ icon }) {
   const filtro = useSelector((state) => state.operaciones.filtro);

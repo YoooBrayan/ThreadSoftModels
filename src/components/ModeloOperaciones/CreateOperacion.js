@@ -3,7 +3,7 @@ import {
   obtenerOperacionesAccion,
   obtenerOperacionesModeloAccion,
   agregarNuevaOperacionModeloAccion,
-} from "../../redux/operacionesDucks";
+} from "redux/operacionesDucks";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
