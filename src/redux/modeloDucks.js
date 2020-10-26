@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API } from "service/settings";
+import { API } from "services/settings";
 import Swal from "sweetalert2";
 
 // constantes
@@ -54,7 +54,11 @@ export default function modeloReducer(state = dataInicial, action) {
 
 export const obtenerModeloAccion = (id) => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`${API}modelo/${id}`);
+    const res = await axios.get(`${API}modelo/${id}`, {
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+      }
+    });
     dispatch({
       type: OBTENER_MODELO_EXITO,
       payload: res.data,
@@ -83,7 +87,11 @@ export const actualizarModeloAccion = (data) => async (dispatch, getState) => {
 export const actualizarModeloAPIAccion = () => async (dispatch, getState) => {
   try {
     const data = getState().modelo;
-    const res = await axios.put(`${API}modelo`, data);
+    const res = await axios.put(`${API}modelo`, data, {
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+      }
+    });
     if (res.data.response) {
       Swal.fire({
         position: "top-end",

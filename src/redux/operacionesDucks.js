@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import axios from "axios";
-import { API } from "service/settings";
+import { API } from "services/settings";
 
 // constantes
 
@@ -76,7 +76,11 @@ export default function operacionesReducer(state = dataInicial, action) {
 
 export const obtenerOperacionesAccion = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get(`${API}operacion`);
+    const res = await axios.get(`${API}operacion`, {
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+      }
+    });
     dispatch({
       type: OBTENER_OPERACIONES_EXITO,
       payload: res.data,
@@ -92,7 +96,11 @@ export const obtenerOperacionesModeloAccion = (idModelo) => async (
 ) => {
   try {
     const res = await axios.get(
-      `${API}modelo/${idModelo}/operaciones`
+      `${API}modelo/${idModelo}/operaciones`, {
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        }
+      }
     );
 
     let total = 0;
@@ -120,7 +128,11 @@ export const agregarNuevaOperacionModeloAccion = (
   try {
     const res = await axios.post(
       `${API}operacion`,
-      newOperacion
+      newOperacion, {
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        }
+      }
     );
 
     if (res.data.response) {
@@ -130,15 +142,27 @@ export const agregarNuevaOperacionModeloAccion = (
       });
 
       const res = await axios.get(
-        `${API}operacion/lastId`
+        `${API}operacion/lastId`, {
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          }
+        }
       );
       const response = await axios.post(
         `${API}modeloOperacion`,
-        { modelo: idModelo, operacion: res.data }
+        { modelo: idModelo, operacion: res.data }, {
+          headers: {
+            Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          }
+        }
       );
       if (response.data.response) {
         const idModeloOperacion = await axios.get(
-          `${API}modeloOperacion`
+          `${API}modeloOperacion`, {
+            headers: {
+              Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+            }
+          }
         );
 
         dispatch({
@@ -206,11 +230,19 @@ export const agregarOperacionModeloAccion = (operacion) => async (
     const modelo = getState().modelo;
     const res = await axios.post(
       `${API}modeloOperacion`,
-      { modelo: modelo.id, operacion: operacion.id }
+      { modelo: modelo.id, operacion: operacion.id }, {
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        }
+      }
     );
 
     const responseId = await axios.get(
-      `${API}modeloOperacion`
+      `${API}modeloOperacion`, {
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        }
+      }
     );
 
     if (res.data.response) {
@@ -260,7 +292,11 @@ export const eliminarOperacionModeloAccion = (operacion) => async (
 ) => {
   try {
     const res = await axios.delete(
-      `${API}modeloOperacion/${operacion.id}`
+      `${API}modeloOperacion/${operacion.id}`, {
+        headers: {
+          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        }
+      }
     );
 
     if (res.data) {

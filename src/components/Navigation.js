@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Navigation() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <Link className="navbar-brand" to="/modelo">
         Modelos
       </Link>
@@ -20,8 +20,10 @@ export default function Navigation() {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
-          <li className="nav-item active">
-            
+          <li className="nav-item">
+            <Link className="nav-link" to="/login">
+              Sign out
+            </Link>
           </li>
         </ul>
       </div>
