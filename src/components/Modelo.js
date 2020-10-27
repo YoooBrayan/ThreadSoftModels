@@ -115,7 +115,7 @@ export default function Modelo(props) {
   };
 
   return (
-    <div className="">
+    <div className="mb-5">
       <Navigation />
       <div className="container">
         <div className="row">
@@ -183,11 +183,7 @@ export default function Modelo(props) {
                 </div>
                 <img
                   loading="lazy"
-                  src={
-                    busqueda.nombre === "Nuevo"
-                      ? "https://www.pinclipart.com/picdir/big/335-3351291_blouse-coloring-page-imagenes-de-blusa-para-dibujar.png"
-                      : "https://svgsilh.com/svg/39388.svg"
-                  }
+                  src="https://svgsilh.com/svg/39388.svg"
                   className="card-image-top mt-3"
                   style={{ width: 100, margin: "auto" }}
                   alt=""
@@ -197,18 +193,15 @@ export default function Modelo(props) {
                   <p className="card-text">{busqueda.valor}</p>
                   <Link
                     to={"modelo/operaciones/" + busqueda.id}
-                    className={
-                      busqueda === "Nuevo"
-                        ? "btn btn-success"
-                        : "btn btn-primary"
-                    }
+                    className="btn btn-primary"
                   >
-                    {busqueda.nombre === "Nuevo" ? "Agregar" : "operaciones"}
+                    operaciones
                   </Link>
                 </div>
               </div>
             </div>
-          ))}
+          ))}{
+          busqueda.length===0 ? <div className="alert alert-warning m-3" role="alert">  No se encontraron modelos que coincidan con : {filtro }</div>: ""}
         </div>
       </div>
     </div>

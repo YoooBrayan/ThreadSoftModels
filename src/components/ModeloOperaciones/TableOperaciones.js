@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 export default function TableOperaciones({ icon }) {
 
   const total = useSelector((state) => state.operaciones.total)
+  const filtro = useSelector((state) => state.operaciones.filtro);
 
   let operaciones = useSelector((state) => (icon.iconName === "times") ? state.operaciones.operacionesModelo : state.operaciones.busqueda)
   
@@ -44,6 +45,8 @@ export default function TableOperaciones({ icon }) {
     }
   };
 
+
+
   return (
     <table className="table">
       <thead>
@@ -70,6 +73,7 @@ export default function TableOperaciones({ icon }) {
             </td>
           </tr>
         ))}
+        {filtro !== "" && operaciones.length === 0 ? <tr><td className="alert alert-warning" colSpan="3">No se encontraron operaciones con: {filtro}</td></tr>: <tr><td></td></tr>}
       </tbody>
       {icon.iconName === "times" ? (
         <tfoot>
