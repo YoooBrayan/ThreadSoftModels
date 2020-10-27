@@ -56,7 +56,7 @@ export const obtenerModeloAccion = (id) => async (dispatch, getState) => {
   try {
     const res = await axios.get(`${API}modelo/${id}`, {
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        Authorization: "Bearer " + window.localStorage.getItem("jwt")
       }
     });
     dispatch({
@@ -89,10 +89,10 @@ export const actualizarModeloAPIAccion = () => async (dispatch, getState) => {
     const data = getState().modelo;
     const res = await axios.put(`${API}modelo`, data, {
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        Authorization: "Bearer " + window.localStorage.getItem("jwt")
       }
     });
-    if (res.data.response) {
+    if (res.data) {
       Swal.fire({
         position: "top-end",
         icon: "success",

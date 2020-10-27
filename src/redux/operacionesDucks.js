@@ -78,7 +78,7 @@ export const obtenerOperacionesAccion = () => async (dispatch, getState) => {
   try {
     const res = await axios.get(`${API}operacion`, {
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+        Authorization: "Bearer " + window.localStorage.getItem("jwt")
       }
     });
     dispatch({
@@ -98,7 +98,7 @@ export const obtenerOperacionesModeloAccion = (idModelo) => async (
     const res = await axios.get(
       `${API}modelo/${idModelo}/operaciones`, {
         headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          Authorization: "Bearer " + getState().login.token
         }
       }
     );
@@ -130,7 +130,7 @@ export const agregarNuevaOperacionModeloAccion = (
       `${API}operacion`,
       newOperacion, {
         headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          Authorization: "Bearer " + window.localStorage.getItem("jwt")
         }
       }
     );
@@ -144,7 +144,7 @@ export const agregarNuevaOperacionModeloAccion = (
       const res = await axios.get(
         `${API}operacion/lastId`, {
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+            Authorization: "Bearer " + window.localStorage.getItem("jwt")
           }
         }
       );
@@ -152,7 +152,7 @@ export const agregarNuevaOperacionModeloAccion = (
         `${API}modeloOperacion`,
         { modelo: idModelo, operacion: res.data }, {
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+            Authorization: "Bearer " + window.localStorage.getItem("jwt")
           }
         }
       );
@@ -160,7 +160,7 @@ export const agregarNuevaOperacionModeloAccion = (
         const idModeloOperacion = await axios.get(
           `${API}modeloOperacion`, {
             headers: {
-              Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+              Authorization: "Bearer " + window.localStorage.getItem("jwt")
             }
           }
         );
@@ -232,7 +232,7 @@ export const agregarOperacionModeloAccion = (operacion) => async (
       `${API}modeloOperacion`,
       { modelo: modelo.id, operacion: operacion.id }, {
         headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          Authorization: "Bearer " + window.localStorage.getItem("jwt")
         }
       }
     );
@@ -240,7 +240,7 @@ export const agregarOperacionModeloAccion = (operacion) => async (
     const responseId = await axios.get(
       `${API}modeloOperacion`, {
         headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          Authorization: "Bearer " + window.localStorage.getItem("jwt")
         }
       }
     );
@@ -294,7 +294,7 @@ export const eliminarOperacionModeloAccion = (operacion) => async (
     const res = await axios.delete(
       `${API}modeloOperacion/${operacion.id}`, {
         headers: {
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt")
+          Authorization: "Bearer " + window.localStorage.getItem("jwt")
         }
       }
     );

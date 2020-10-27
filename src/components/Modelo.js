@@ -18,14 +18,12 @@ export default function Modelo(props) {
   const [busqueda, setBusqueda] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  //const {token} = useSelector(state => state.login)
-
   const getModels = async () => {
     try {
       const models = await axios.get(`${API}modelo`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt"),
+          Authorization: "Bearer " + window.localStorage.getItem("jwt"),
         },
       });
       const data = await models.data;
@@ -49,17 +47,8 @@ export default function Modelo(props) {
     }
   };
 
-  /*const getModelId = async () => {
-    const model = await axios.get(
-      "http://localhost:8080/api/v1/modelo/params",
-      { params: { id: 33, modelo: "Bolero"} }
-    );
-    const data = model.data;
-    setModeloId(data);
-  };*/
-
   useEffect(() => {
-    if (window.sessionStorage.getItem("jwt")) {
+    if (window.localStorage.getItem("jwt")) {
       getModels();
     } else {
       history.push("/login");
@@ -76,7 +65,7 @@ export default function Modelo(props) {
         if (item.nombre.toLowerCase().includes(filtro) && filtro) {
           return item;
         } else if (!filtro) {
-          return getModels();
+          return modelo;
         } else {
           return null;
         }
@@ -100,7 +89,7 @@ export default function Modelo(props) {
         `http://localhost:8080/api/v1/modelo/${id}`,
         {
           headers: {
-            Authorization: "Bearer " + window.sessionStorage.getItem("jwt"),
+            Authorization: "Bearer " + window.localStorage.getItem("jwt"),
           },
         }
       );

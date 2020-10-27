@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { salirAction } from "../redux/loginDucks";
 
 export default function Navigation() {
+  const dispatch = useDispatch();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <Link className="navbar-brand" to="/modelo">
@@ -21,7 +25,13 @@ export default function Navigation() {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link className="nav-link" to="/login">
+            <Link
+              className="nav-link"
+              to="/login"
+              onClick={() => {
+                dispatch(salirAction());
+              }}
+            >
               Sign out
             </Link>
           </li>

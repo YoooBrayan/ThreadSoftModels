@@ -9,7 +9,7 @@ export const CreateModelo = (props) => {
   const { history } = props;
 
   useEffect(() => {
-    if (!window.sessionStorage.getItem("jwt")) {
+    if (!window.localStorage.getItem("jwt")) {
       history.push("/login");
     }
     return () => {};
@@ -28,7 +28,7 @@ export const CreateModelo = (props) => {
         body: JSON.stringify(newModelo),
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.sessionStorage.getItem("jwt"),
+          Authorization: "Bearer " + window.localStorage.getItem("jwt"),
         },
       });
 

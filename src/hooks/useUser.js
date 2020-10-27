@@ -17,7 +17,7 @@ export default function useUser() {
 
       loginService({ email, password })
         .then((res) => {
-          window.sessionStorage.setItem("jwt", res);
+          window.localStorage.setItem("jwt", res);
           setState({ loading: true, error: false });
           dispatch(accerderAction(res));
         })
@@ -29,7 +29,7 @@ export default function useUser() {
             title: error,
             text: error,
           });
-          window.sessionStorage.removeItem("jwt");
+          window.localStorage.removeItem("jwt");
           setState({ loading: false, error: true });
         });
     },

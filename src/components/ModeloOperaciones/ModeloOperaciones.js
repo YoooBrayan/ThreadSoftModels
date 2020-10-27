@@ -18,7 +18,7 @@ export default function ModeloOperaciones(props) {
   const { error } = useSelector((state) => state.modelo);
 
   useEffect(() => {
-    if (window.sessionStorage.getItem("jwt")) {
+    if (window.localStorage.getItem("jwt")) {
       dispatch(obtenerModeloAccion(id));
     } else {
       history.push("/login");
