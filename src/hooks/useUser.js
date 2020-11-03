@@ -14,7 +14,6 @@ export default function useUser() {
   const login = useCallback(
     ({ email, password }) => {
       setState({ loading: true, error: false });
-
       loginService({ email, password })
         .then((res) => {
           window.localStorage.setItem("jwt", res);
@@ -34,7 +33,7 @@ export default function useUser() {
         });
     },
     [token] // eslint-disable-line react-hooks/exhaustive-deps
-  ); 
+  );
 
   return {
     isLogged: Boolean(token),

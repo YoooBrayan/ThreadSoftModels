@@ -6,7 +6,7 @@ export default function Login(props) {
   const { history } = props;
 
   useEffect(() => {
-    if (isLogged) {
+    if (isLogged && localStorage.getItem("jwt")) {
       history.push("/modelo");
     }else{
       window.sessionStorage.removeItem("jwt");

@@ -31,26 +31,23 @@ export default function Modelo(props) {
       setBusqueda(data);
       setLoading(false);
     } catch (error) {
-      Swal.fire({
+      localStorage.removeItem("jwt");
+      await Swal.fire({
         title: "Error",
         text: error,
         icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Reload!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          getModels();
-        }
+        timer: 2000
       });
+      history.push("/login");
     }
   };
 
   useEffect(() => {
     if (window.localStorage.getItem("jwt")) {
+      console.log("entro");
       getModels();
     } else {
+      console.log("No entro");
       history.push("/login");
     }
     //getModelId();
@@ -200,8 +197,15 @@ export default function Modelo(props) {
                 </div>
               </div>
             </div>
-          ))}{
-          busqueda.length===0 ? <div className="alert alert-warning m-3" role="alert">  No se encontraron modelos que coincidan con : {filtro }</div>: ""}
+          ))}
+          {busqueda.length === 0 ? (
+            <div className="alert alert-warning m-3" role="alert">
+              {" "}
+              No se encontraron modelos que coincidan con : {filtro}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
