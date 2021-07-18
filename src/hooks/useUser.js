@@ -12,10 +12,10 @@ export default function useUser() {
   const [state, setState] = useState({ loading: false, error: false });
 
   const login = useCallback(
-    ({ email, password }) => {
+    ({ username, password }) => {
       setState({ loading: true, error: false });
 
-      loginService({ email, password })
+      loginService({ username, password })
         .then((res) => {
           window.localStorage.setItem("jwt", res);
           setState({ loading: true, error: false });

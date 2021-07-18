@@ -14,7 +14,7 @@ export default function Login(props) {
   }, [isLogged, history]);
 
   const [data, setData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -24,6 +24,7 @@ export default function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("data", data);
     login(data);
   };
 
@@ -37,10 +38,9 @@ export default function Login(props) {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <input
-                  type="email"
-                  name="email"
+                  name="username"
                   className="form-control"
-                  placeholder="email"
+                  placeholder="username"
                   onChange={handleChangeInput}
                   required
                 />
